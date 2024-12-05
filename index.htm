@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reprodutor de Música MP3</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 50px;
+      }
+      .player {
+        width: 300px;
+        margin: auto;
+      }
+      .controls {
+        margin-top: 20px;
+      }
+      .controls button {
+        padding: 10px;
+        margin: 5px;
+      }
+      .progress-container {
+        margin: 20px 0;
+      }
+      .progress-bar {
+        width: 100%;
+        height: 10px;
+        background-color: #ccc;
+      }
+      .progress {
+        width: 0;
+        height: 100%;
+        background-color: #4caf50;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="player">
+      <h1>Reprodutor de Música</h1>
+      <audio id="audioPlayer">
+        <source
+          src="C:\Users\fgcdv\OneDrive\Área de Trabalho\musicas\I Don't Want To Talk About It (from One Night Only! Rod Stewart Live at Royal Albert Hall) (1).mp3"
+          type="audio/mpeg"
+        />
+      </audio>
+
+      <div class="controls">
+        <button id="playPauseBtn">Play</button>
+        <button id="prevBtn"><<</button>
+        <button id="nextBtn">>></button>S
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress" id="progress"></div>
+        </div>
+        <span id="currentTime">00:00</span> / <span id="duration">00:00</span>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", (event) => {
+        const audioPlayer = document.getElementById("audioPlayer");
+        const playPauseBtn = document.getElementById("playPauseBtn");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const progress = document.getElementById("progress");
+        const currentTimeEl = document.getElementById("currentTime");
+        const durationEl = document.getElementById("duration");
+
+        playPauseBtn.addEventListener("click", () => {
+          if (audioPlayer.paused) {
+            audioPlayer.play();
+            playPauseBtn.textContent = "Pause";
+          } else {
+            audioPlayer.pause();
+            playPauseBtn.textContent = "Play";
+          }
+        });
+
+        prevBtn.addEventListener("click", () => {
+          audioPlayer.currentTime -= 10;
+        });
+
+        nextBtn.addEventListener("click", () => {
+          audioPlayer.currentTime += 10;
+        });
+
+        audioPlayer.addEventListener("timeupdate", () => {
+          const progressPercent =
+            (audioPlayer.currentTime / audioPlayer.duration) * 100;
+          progress.style.width = `${progressPercent}%`;
+          currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+          durationEl.textContent = formatTime(audioPlayer.duration);
+        });
+
+        audioPlayer.addEventListener("loadedmetadata", () => {
+          durationEl.textContent = formatTime(audioPlayer.duration);
+        });
+
+        function formatTime(seconds) {
+          const minutes = Math.floor(seconds / 60);
+          const secs = Math.floor(seconds % 60);
+          return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+        }
+      });
+    </script>
+  </body>
+</html>
